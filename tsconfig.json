@@ -19,7 +19,7 @@
       "esnext"
     ],
     "incremental": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "src",
     "typeRoots": [

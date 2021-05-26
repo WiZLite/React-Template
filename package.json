@@ -13,6 +13,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
+    "typed-css-modules": "^0.6.8",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
@@ -20,12 +21,36 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fix": "npm run -s format && npm run -s lint:fix",
+    "format": "prettier --write --loglevel=warn src/**/*.{js,jsx,ts,tsx,gql,graphql,json}",
+    "lint": "npm run -s lint:style && npm run -s lint:es",
+    "lint:fix": "npm run -s lint:style:fix && npm run -s lint:es:fix",
+    "lint:es": "eslint src/**/*.{js,jsx,ts,tsx}",
+    "lint:es:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
+    "lint:conflict": "eslint-config-prettier src/**/*.{js,jsx,ts,tsx}",
+    "lint:style": "stylelint src/**/*.{css,less,sass,scss}",
+    "lint:style:fix": "stylelint --fix src/**/*.{css,less,sass,scss}",
+    "preinstall": "typesync || true",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build:storybook": "build-storybook -o build/storybook",
+    "build-storybook": "build-storybook -s public",
+    "typecss": "npx tcm src --watch"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   },
   "browserslist": {
@@ -38,6 +63,74 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-decorators": "^7.12.13",
+    "@babel/plugin-transform-typescript": "^7.13.0",
+    "@storybook/addon-a11y": "^6.2.9",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-info": "^5.3.21",
+    "@storybook/addon-knobs": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/addon-viewport": "^6.2.9",
+    "@storybook/node-logger": "^6.2.9",
+    "@storybook/preset-create-react-app": "^3.1.7",
+    "@storybook/react": "^6.2.9",
+    "@types/bootstrap": "^5.0.13",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.45",
+    "@types/prettier": "^2.2.3",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.5",
+    "@types/storybook__addon-a11y": "^5.1.2",
+    "@types/storybook__addon-actions": "^5.2.1",
+    "@types/storybook__addon-info": "^5.2.3",
+    "@types/storybook__addon-knobs": "^5.2.1",
+    "@types/storybook__addon-links": "^5.2.1",
+    "@types/storybook__react": "^5.2.1",
+    "@types/stylelint": "^9.10.1",
+    "@types/testing-library__jest-dom": "^5.9.5",
+    "@types/testing-library__user-event": "^4.2.0",
+    "@types/webpack": "5.28.0",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "babel-loader": "8.1.0",
+    "csharp-models-to-typescript": "^0.21.1",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.23.0",
+    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.2.1",
+    "react-docgen-typescript-loader": "^3.7.2",
+    "stylelint": "^13.12.0",
+    "stylelint-config-recess-order": "^2.3.0",
+    "stylelint-config-standard": "^21.0.0",
+    "stylelint-order": "^4.1.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
+    "typesync": "^0.8.0",
+    "webpack": "4.44.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-merge": "(git diff 'HEAD@{1}' --name-only | grep package.json > /dev/null) && npm i || true"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write --loglevel=warn",
+      "eslint --fix"
+    ],
+    "src/**/*.css": [
+      "stylelint --fix"
+    ],
+    "src/**/*.{gql,graphql,json}": [
+      "prettier --write --loglevel=warn"
     ]
   }
 }
